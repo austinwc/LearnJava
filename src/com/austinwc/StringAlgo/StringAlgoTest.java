@@ -7,21 +7,36 @@ import java.util.List;
 public class StringAlgoTest {
     public static void main(String[] args) {
         long elapsedTime;
-        StringSearch mySearch = new NaiveStringSearch();
+        StringSearch searchAlgo;
         ApproxTimeElapsed timer = new ApproxTimeElapsed();
         List<Integer> result;
 
-        // Naive Search
+        // Naive Search -> O(n^2)
+        searchAlgo = new NaiveStringSearch();
         timer.setStartTime();
-        result = mySearch.search(searchText, matchWord);
+        result = searchAlgo.search(searchText, matchWord);
         elapsedTime = timer.getElapsedTime();
-        System.out.println("Naive search on first string took " + elapsedTime + " millis");
+        System.out.println("Naive search on normal string took " + elapsedTime + " millis");
         System.out.println("Locations: " + result.toString());
 
         timer.setStartTime();
-        result = mySearch.search(worstSearch, worstMatch);
+        result = searchAlgo.search(worstSearch, worstMatch);
         elapsedTime = timer.getElapsedTime();
-        System.out.println("Naive search on second string took " + elapsedTime + " millis");
+        System.out.println("Naive search on worst-case string took " + elapsedTime + " millis");
+        System.out.println("Locations: " + result.toString());
+
+        // KMP searchAlgo -> O(n)
+        searchAlgo = new KMPStringSearch();
+        timer.setStartTime();
+        result = searchAlgo.search(searchText, matchWord);
+        elapsedTime = timer.getElapsedTime();
+        System.out.println("KMP search on normal string took " + elapsedTime + " millis");
+        System.out.println("Locations: " + result.toString());
+
+        timer.setStartTime();
+        result = searchAlgo.search(worstSearch, worstMatch);
+        elapsedTime = timer.getElapsedTime();
+        System.out.println("KMP search on worst-case string took " + elapsedTime + " millis");
         System.out.println("Locations: " + result.toString());
     }
 
