@@ -1,22 +1,28 @@
 package com.austinwc.StringAlgo;
 
+import com.austinwc.TestUtils.ApproxTimeElapsed;
+
 import java.util.List;
 
 public class StringAlgoTest {
     public static void main(String[] args) {
+        long elapsedTime;
         StringSearch mySearch = new NaiveStringSearch();
+        ApproxTimeElapsed timer = new ApproxTimeElapsed();
+        List<Integer> result;
 
-        long before = System.currentTimeMillis();
-        List<Integer> naive = mySearch.search(searchText, matchWord);
-        long after = System.currentTimeMillis();
-            System.out.println("Naive search on first string took " + Long.valueOf(after - before) + " millis");
-            System.out.println("Locations: " + naive.toString());
+        // Naive Search
+        timer.setStartTime();
+        result = mySearch.search(searchText, matchWord);
+        elapsedTime = timer.getElapsedTime();
+        System.out.println("Naive search on first string took " + elapsedTime + " millis");
+        System.out.println("Locations: " + result.toString());
 
-        before = System.currentTimeMillis();
-        naive = mySearch.search(worstSearch, worstMatch);
-        after = System.currentTimeMillis();
-            System.out.println("Naive search on second string took " + Long.valueOf(after - before) + " millis");
-            System.out.println("Locations: " + naive.toString());
+        timer.setStartTime();
+        result = mySearch.search(worstSearch, worstMatch);
+        elapsedTime = timer.getElapsedTime();
+        System.out.println("Naive search on second string took " + elapsedTime + " millis");
+        System.out.println("Locations: " + result.toString());
     }
 
     static private String searchText = "How much text can I reasonably put on a single line? Or in a single string?" +
