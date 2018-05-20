@@ -4,6 +4,7 @@ import com.austinwc.TestUtils.ApproxTimeElapsed;
 
 import java.util.List;
 
+// TODO Add file access to search very large strings. Current test case input too small to see difference
 public class StringAlgoTest {
     public static void main(String[] args) {
         long elapsedTime;
@@ -25,7 +26,7 @@ public class StringAlgoTest {
         System.out.println("Naive search on worst-case string took " + elapsedTime + " millis");
         System.out.println("Locations: " + result.toString());
 
-        // KMP searchAlgo -> O(n)
+        // KMP Search -> O(n)
         searchAlgo = new KMPStringSearch();
         timer.setStartTime();
         result = searchAlgo.search(searchText, matchWord);
