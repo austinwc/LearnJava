@@ -1,4 +1,4 @@
-package com.austinwc.TestUtils;
+package com.austinwc.testutils;
 
 public class ApproxTimeElapsed {
     private long startTime = -1;

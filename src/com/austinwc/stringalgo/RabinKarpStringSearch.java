@@ -1,4 +1,4 @@
-package com.austinwc.StringAlgo;
+package com.austinwc.stringalgo;
 
 import java.util.ArrayList;
 import java.util.List;

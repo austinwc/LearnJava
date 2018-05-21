@@ -1,6 +1,6 @@
-package com.austinwc.StringAlgo;
+package com.austinwc.stringalgo;
 
-import com.austinwc.TestUtils.ApproxTimeElapsed;
+import com.austinwc.testutils.ApproxTimeElapsed;
 
 import java.util.List;
 
