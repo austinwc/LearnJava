@@ -30,49 +30,53 @@ public class SortAlgoTest {
         return result;
     }
 
-    private static void runTest(String sortName, IntegerSort sortAlgo) {
+    private static void runTests(String sortName, IntegerSort sortAlgo) {
         ApproxTimeElapsed timer = new ApproxTimeElapsed();
         Integer[] array;
         long elapsedMillis;
 
+        System.out.println("====== Testing " + sortName + " ======");
 
         // Random Input
-        array = createMixedArray(5000, 10000);
-        System.out.println("Testing " + sortName + " on 5000 random elements...");
+        array = createMixedArray(10000, 10000);
+        System.out.println("Testing on random elements...");
         timer.setStartTime();
         sortAlgo.sort(array);
         elapsedMillis = timer.getElapsedTime();
         System.out.println("Finished sorting after " + elapsedMillis + " milliseconds");
-        System.out.println("Sorted array result: " + Arrays.toString(array));
         System.out.println();
 
         // Reversed Input
-        array = createReversedArray(5000);
-        System.out.println("Testing " + sortName + " on 5000 elements in reverse order...");
+        array = createReversedArray(10000);
+        System.out.println("Testing on reversed elements...");
         timer.setStartTime();
         sortAlgo.sort(array);
         elapsedMillis = timer.getElapsedTime();
         System.out.println("Finished sorting after " + elapsedMillis + " milliseconds");
-        System.out.println("Sorted array result: " + Arrays.toString(array));
         System.out.println();
 
         // Sorted Input
-        array = createSortedArray(5000);
-        System.out.println("Testing " + sortName + " on 5000 sorted elements...");
+        array = createSortedArray(10000);
+        System.out.println("Testing on sorted elements...");
         timer.setStartTime();
         sortAlgo.sort(array);
         elapsedMillis = timer.getElapsedTime();
         System.out.println("Finished sorting after " + elapsedMillis + " milliseconds");
-        System.out.println("Sorted array result: " + Arrays.toString(array));
         System.out.println("\n");
     }
 
     public static void main(String[] args) {
 
         // Insertion Sort O(N^2)
-        runTest("Insertion Sort", new InsertSort());
+        runTests("Insertion Sort", new InsertSort());
 
-        // Insertion Sort O(N^2)
-        runTest("Heap Sort", new HeapSort());
+        // Heap Sort O(NlogN)
+        runTests("Heap Sort", new HeapSort());
+
+        // Quick Sort O(NlogN) -> worst case O(N^2)
+        runTests("Quick Sort", new QuickSort());
+
+        // Randomized Quick Sort O(NlogN)
+        runTests("Randomized Quick Sort", new RandomizedQuickSort());
     }
 }
