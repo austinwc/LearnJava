@@ -4,10 +4,20 @@ import com.austinwc.testutils.ApproxTimeElapsed;
 
 import java.util.Arrays;
 import java.util.Random;
+import java.util.function.Function;
 
 public class SortAlgoTest {
-    private static Integer[] createMixedArray(int size, int upperBound) {
+    private static boolean isSorted(Integer[] array) {
+        for (int i = 1; i < array.length; i++) {
+            if (array[i - 1] > array[i])
+                return false;
+        }
+        return true;
+    }
+
+    private static Integer[] createMixedArray(int size) {
         Random rand = new Random();
+        int upperBound = 10000;
         rand.setSeed(System.currentTimeMillis());
         Integer[] result = new Integer[size];
 
@@ -30,39 +40,37 @@ public class SortAlgoTest {
         return result;
     }
 
-    private static void runTests(String sortName, IntegerSort sortAlgo) {
+    private static void runTest(String sortName, IntegerSort sortAlgo, int inputSize,
+                                String inputType, Function<Integer, Integer[]> genInput) {
+
         ApproxTimeElapsed timer = new ApproxTimeElapsed();
         Integer[] array;
         long elapsedMillis;
 
+        // Test setup
+        array = genInput.apply(inputSize);
+
+        // Run test
+        System.out.println("Testing on " + inputSize + inputType + " elements...");
+        timer.setStartTime();
+        sortAlgo.sort(array);
+        elapsedMillis = timer.getElapsedTime();
+
+        // Check Result and report
+        if (!isSorted(array)) {
+            System.out.println("Array: " + Arrays.toString(array));
+            throw new IllegalStateException("Array not sorted!");
+        }
+        System.out.println("Finished sorting after " + elapsedMillis + " milliseconds");
+        System.out.println();
+    }
+
+    private static void runTests(String sortName, IntegerSort sortAlgo) {
         System.out.println("====== Testing " + sortName + " ======");
-
-        // Random Input
-        array = createMixedArray(10000, 10000);
-        System.out.println("Testing on random elements...");
-        timer.setStartTime();
-        sortAlgo.sort(array);
-        elapsedMillis = timer.getElapsedTime();
-        System.out.println("Finished sorting after " + elapsedMillis + " milliseconds");
+        runTest(sortName, sortAlgo, 50000, "random", SortAlgoTest::createMixedArray);
+        runTest(sortName, sortAlgo, 10000, "sorted", SortAlgoTest::createSortedArray);
+        runTest(sortName, sortAlgo, 10000, "reversed", SortAlgoTest::createReversedArray);
         System.out.println();
-
-        // Reversed Input
-        array = createReversedArray(10000);
-        System.out.println("Testing on reversed elements...");
-        timer.setStartTime();
-        sortAlgo.sort(array);
-        elapsedMillis = timer.getElapsedTime();
-        System.out.println("Finished sorting after " + elapsedMillis + " milliseconds");
-        System.out.println();
-
-        // Sorted Input
-        array = createSortedArray(10000);
-        System.out.println("Testing on sorted elements...");
-        timer.setStartTime();
-        sortAlgo.sort(array);
-        elapsedMillis = timer.getElapsedTime();
-        System.out.println("Finished sorting after " + elapsedMillis + " milliseconds");
-        System.out.println("\n");
     }
 
     public static void main(String[] args) {
@@ -78,5 +86,8 @@ public class SortAlgoTest {
 
         // Randomized Quick Sort O(NlogN)
         runTests("Randomized Quick Sort", new RandomizedQuickSort());
+
+        // MergeSort O(NlogN) -> space complexity O(N)
+        runTests("Merge Sort", new MergeSort());
     }
 }
