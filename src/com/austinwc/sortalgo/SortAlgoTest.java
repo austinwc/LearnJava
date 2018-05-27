@@ -40,7 +40,7 @@ public class SortAlgoTest {
         return result;
     }
 
-    private static void runTest(String sortName, IntegerSort sortAlgo, int inputSize,
+    private static void runTest(IntegerSort sortAlgo, int inputSize,
                                 String inputType, Function<Integer, Integer[]> genInput) {
 
         ApproxTimeElapsed timer = new ApproxTimeElapsed();
@@ -51,7 +51,7 @@ public class SortAlgoTest {
         array = genInput.apply(inputSize);
 
         // Run test
-        System.out.println("Testing on " + inputSize + inputType + " elements...");
+        System.out.println("Testing on " + inputSize + " " + inputType + " elements...");
         timer.setStartTime();
         sortAlgo.sort(array);
         elapsedMillis = timer.getElapsedTime();
@@ -67,9 +67,9 @@ public class SortAlgoTest {
 
     private static void runTests(String sortName, IntegerSort sortAlgo) {
         System.out.println("====== Testing " + sortName + " ======");
-        runTest(sortName, sortAlgo, 50000, "random", SortAlgoTest::createMixedArray);
-        runTest(sortName, sortAlgo, 10000, "sorted", SortAlgoTest::createSortedArray);
-        runTest(sortName, sortAlgo, 10000, "reversed", SortAlgoTest::createReversedArray);
+        runTest(sortAlgo, 50000, "random", SortAlgoTest::createMixedArray);
+        runTest(sortAlgo, 10000, "sorted", SortAlgoTest::createSortedArray);
+        runTest(sortAlgo, 10000, "reversed", SortAlgoTest::createReversedArray);
         System.out.println();
     }
 
