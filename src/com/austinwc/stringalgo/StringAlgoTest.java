@@ -8,7 +8,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
-// TODO Add file access to search very large strings. Current test case input too small to see difference
 public class StringAlgoTest {
     // Text file resources
     private static String worstCasePath = "res/WorstCaseText";
