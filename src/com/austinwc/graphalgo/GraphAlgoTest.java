@@ -13,12 +13,10 @@ public class GraphAlgoTest {
         testG.insertEdge(4, 3);
         testG.insertEdge(4, 2);
 
-        System.out.println(testG.toString());
         testG.printGraph();
 
         testG.removeVertex(2);
 
-        System.out.println(testG.toString());
         testG.printGraph();
     }
 }

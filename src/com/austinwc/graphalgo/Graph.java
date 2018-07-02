@@ -1,7 +1,8 @@
 package com.austinwc.graphalgo;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -9,36 +10,73 @@ import java.util.Set;
 //TODO: Isolate the data structures to cut down on coupling to implementation
 
 public class Graph<K, T> {
-    private Map<K, Set<K>> edges;
+    private Map<K, List<EdgeNode>> edges;
     private Map<K, T> vertices;
     private boolean directed;
+
+    public class EdgeNode {
+        private K vertexKey;
+        private int weight;
+
+        public EdgeNode(K vertex, int weight) {
+            vertexKey = vertex;
+            this.weight = weight;
+        }
+
+        public int getWeight() {
+            return weight;
+        }
+
+        public K getVertexKey() {
+            return vertexKey;
+        }
+    }
 
     public Graph() {
         this(false);
     }
+
     public Graph(boolean directed) {
         edges = new HashMap<>();
         vertices = new HashMap<>();
         this.directed = directed;
     }
 
+    public int size() {
+        return vertices.size();
+    }
+
     public boolean insertEdge(K a, K b) {
+        return insertEdge(a, b, 1);
+    }
+
+    public boolean insertEdge(K a, K b, int weight) {
         if (!(vertices.containsKey(a) && vertices.containsKey(b))) return false;
-        edges.get(a).add(b);
+        edges.get(a).add(new EdgeNode(b, weight));
         if (!directed)
-            edges.get(b).add(a);
+            edges.get(b).add(new EdgeNode(a, weight));
         return true;
     }
 
     public boolean removeEdge(K a, K b) {
         if (!(vertices.containsKey(a) && vertices.containsKey(b))) return false;
-        edges.get(a).remove(b);
+
+        // Find and remove edge
+        List<EdgeNode> adjList = edges.get(a);
+        EdgeNode tmp = null;
+        for (int i = 0; i < adjList.size(); i++) {
+            if (adjList.get(i).getVertexKey() == b) tmp = adjList.get(i);
+        }
+        if (tmp == null) return false;
+        adjList.remove(tmp);
+
+        // If undirected graph, remove duplicate edge as well
         if (!directed)
-            edges.get(b).remove(a);
+            removeEdge(b, a);
         return true;
     }
 
-    public Set<K> successors(K id) {
+    public List<EdgeNode> successors(K id) {
         return edges.getOrDefault(id, null);
     }
 
@@ -49,7 +87,7 @@ public class Graph<K, T> {
     public boolean insertVertex(K id, T field) {
         if (vertices.containsKey(id)) return false;
         vertices.put(id, field);
-        edges.put(id, new HashSet<>());
+        edges.put(id, new ArrayList<>());
         return true;
     }
 
@@ -59,7 +97,7 @@ public class Graph<K, T> {
          * We know all references to this node
          */
         if (directed) {
-            for (K neighbor : successors(id)) removeEdge(neighbor, id);
+            for (EdgeNode neighbor : successors(id)) removeEdge(neighbor.getVertexKey(), id);
         } else {
             for (K node : getNodeIds()) removeEdge(node, id);
         }
@@ -79,8 +117,8 @@ public class Graph<K, T> {
         for (K id : getNodeIds()) {
             strB.append(getVertex(id));
             strB.append(" -> ");
-            for (K neighbor : successors(id)) {
-                strB.append(vertices.get(neighbor));
+            for (EdgeNode neighbor : successors(id)) {
+                strB.append(vertices.get(neighbor.getVertexKey()));
                 strB.append(", ");
             }
             strB.append("\n");
